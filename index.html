@@ -11,7 +11,7 @@
 body{
     margin:0;
     padding:0;
-    height:100vh;
+    min-height:100vh;
 
     background:
     radial-gradient(circle at top,
@@ -29,8 +29,8 @@ body{
 
 .panel{
 
-    width:90%;
-    max-width:900px;
+    width:95%;
+    max-width:1200px;
 
     background:rgba(0,20,35,.75);
 
@@ -38,45 +38,64 @@ body{
 
     border-radius:20px;
 
-    padding:30px;
-
-    text-align:center;
+    padding:25px;
 
     box-shadow:
         0 0 30px rgba(0,255,255,.15),
         inset 0 0 40px rgba(0,255,255,.05);
 }
 
-.station{
+.logo{
 
-    font-size:38px;
-    font-weight:bold;
-    letter-spacing:4px;
+    display:block;
+    margin:0 auto 20px auto;
 
-    color:#8ffcff;
+    width:550px;
+    max-width:90%;
+    height:auto;
 
-    text-shadow:
-        0 0 10px rgba(0,255,255,.6);
+    filter:
+        drop-shadow(0 0 12px rgba(0,255,255,.4))
+        drop-shadow(0 0 25px rgba(0,255,255,.2));
+}
 
-    margin-bottom:20px;
+.main{
+
+    display:flex;
+    gap:30px;
+    align-items:center;
 }
 
 .cover{
 
-    width:320px;
-    max-width:80%;
+    width:350px;
+    max-width:35vw;
 
     border-radius:16px;
 
     box-shadow:
         0 0 25px rgba(0,255,255,.25);
+}
 
-    margin-bottom:25px;
+.info{
+
+    flex:1;
+}
+
+.nowplaying{
+
+    color:#8ffcff;
+
+    font-size:18px;
+
+    letter-spacing:3px;
+
+    margin-bottom:15px;
 }
 
 .song{
 
-    font-size:34px;
+    font-size:42px;
     font-weight:bold;
 
     margin-bottom:10px;
@@ -84,11 +103,11 @@ body{
 
 .artist{
 
-    font-size:24px;
+    font-size:28px;
 
     color:#8ffcff;
 
-    margin-bottom:15px;
+    margin-bottom:10px;
 }
 
 .album{
@@ -103,86 +122,132 @@ body{
 .footer{
 
     display:flex;
-    justify-content:center;
     gap:40px;
 
     font-size:18px;
-
-    color:#9fd7e5;
 }
 
 .label{
 
-    opacity:.75;
+    opacity:.7;
 }
 
-.logo{
-    width:500px;
-    max-width:85%;
-    height:auto;
+.history-title{
 
-    margin-bottom:15px;
+    margin-top:30px;
 
-    filter:
-        drop-shadow(0 0 12px rgba(0,255,255,.4))
-        drop-shadow(0 0 25px rgba(0,255,255,.2));
-}    
+    color:#8ffcff;
+
+    font-size:18px;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+    border-top:1px solid rgba(0,255,255,.2);
+
+    padding-top:20px;
+}
+
+.history{
+
+    margin-top:10px;
+
+    background:rgba(0,0,0,.20);
+
+    border-radius:12px;
+
+    padding:15px;
+
+    color:#d6f7ff;
+
+    font-size:15px;
+
+    line-height:1.7;
+}
+
+.cc_recenttracks_list{
+
+    text-align:left;
+}
 
 </style>
-
 </head>
 
 <body>
 
 <div class="panel">
 
-<div class="station">
     <img src="logo.png" class="logo">
-</div>
 
-    <img class="cc_streaminfo cover"
-         data-type="trackimageurl"
-         data-username="francisc">
+    <div class="main">
 
-    <div class="song">
-        <span class="cc_streaminfo"
-              data-type="tracktitle"
-              data-username="francisc"></span>
-    </div>
+        <img class="cc_streaminfo cover"
+             data-type="trackimageurl"
+             data-username="francisc">
 
-    <div class="artist">
-        <span class="cc_streaminfo"
-              data-type="trackartist"
-              data-username="francisc"></span>
-    </div>
+        <div class="info">
 
-    <div class="album">
-        <span class="cc_streaminfo"
-              data-type="trackalbum"
-              data-username="francisc"></span>
-    </div>
+            <div class="nowplaying">
+                NOW PLAYING
+            </div>
 
-    <div class="footer">
+            <div class="song">
+                <span class="cc_streaminfo"
+                      data-type="tracktitle"
+                      data-username="francisc"></span>
+            </div>
 
-        <div>
-            <span class="label">Listeners</span><br>
-            <span class="cc_streaminfo"
-                  data-type="listeners"
-                  data-username="francisc"></span>
+            <div class="artist">
+                <span class="cc_streaminfo"
+                      data-type="trackartist"
+                      data-username="francisc"></span>
+            </div>
+
+            <div class="album">
+                Album:
+                <span class="cc_streaminfo"
+                      data-type="trackalbum"
+                      data-username="francisc"></span>
+            </div>
+
+            <div class="footer">
+
+                <div>
+                    <span class="label">Listeners</span><br>
+                    <span class="cc_streaminfo"
+                          data-type="listeners"
+                          data-username="francisc"></span>
+                </div>
+
+                <div>
+                    <span class="label">Bitrate</span><br>
+                    <span class="cc_streaminfo"
+                          data-type="bitrate"
+                          data-username="francisc"></span>
+                </div>
+
+            </div>
+
         </div>
 
-        <div>
-            <span class="label">Bitrate</span><br>
-            <span class="cc_streaminfo"
-                  data-type="bitrate"
-                  data-username="francisc"></span>
-        </div>
+    </div>
 
+    <div class="history-title">
+        Recent Tracks
+    </div>
+
+    <div class="history">
+        <div class="cc_recenttracks_list"
+             data-username="francisc">
+             Loading...
+        </div>
     </div>
 
 </div>
 
 <script src="https://falcon.shoutca.st/system/streaminfo.js"></script>
+<script src="https://falcon.shoutca.st/system/recenttracks.js"></script>
 
 </body>
 </html>
