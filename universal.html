@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Radio Widget</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a2a3a 0%, #04121c 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .widget {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(0, 30, 45, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 25px;
+            text-align: center;
+        }
+        .station-name {
+            font-size: 18px;
+            letter-spacing: 2px;
+            color: #8ffcff;
+            margin-bottom: 20px;
+        }
+        .cover {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            border-radius: 20px;
+            object-fit: cover;
+            background: #0a2a3a;
+            box-shadow: 0 0 20px rgba(0,255,255,0.2);
+        }
+        .song-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .artist {
+            font-size: 16px;
+            color: #8ffcff;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8ffcff;
+        }
+        .stat-label {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+        .live {
+            color: #00ff88;
+            text-shadow: 0 0 8px #00ff88;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .error {
+            background: rgba(255,0,0,0.3);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="widget" id="widget">
+        <div class="station-name" id="stationName">Radio Station</div>
+        <img class="cover" id="cover" src="" alt="Album Art">
+        <div class="song-title" id="songTitle">--</div>
+        <div class="artist" id="artist">--</div>
+        <div class="stats">
+            <div>
+                <div class="stat-value" id="listeners">--</div>
+                <div class="stat-label">LISTENERS</div>
+            </div>
+            <div>
+                <div class="stat-value" id="bitrate">--</div>
+                <div class="stat-label">KBPS</div>
+            </div>
+            <div>
+                <div class="stat-value live" id="status">LIVE</div>
+                <div class="stat-label">STATUS</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Leer URL de los parámetros
+        const urlParams = new URLSearchParams(window.location.search);
+        let STREAM_URL = urlParams.get('url') || urlParams.get('stream');
+        
+        // Si no hay URL, usar demo
+        if (!STREAM_URL) {
+            STREAM_URL = 'https://live.hubu.fm:8000/stream';
+        }
+        
+        // Extraer base del servidor
+        let baseServer = STREAM_URL.replace(/\/stream$/, '').replace(/\/live$/, '').replace(/\/$/, '');
+        
+        // Proxy CORS gratuito
+        const PROXY = 'https://api.allorigins.win/raw?url=';
+        
+        // Elementos DOM
+        const stationNameEl = document.getElementById('stationName');
+        const songTitleEl = document.getElementById('songTitle');
+        const artistEl = document.getElementById('artist');
+        const listenersEl = document.getElementById('listeners');
+        const bitrateEl = document.getElementById('bitrate');
+        
+        let lastSong = '';
+        
+        async function fetchData() {
+            try {
+                // Probar endpoint Shoutcast v2
+                const statsUrl = `${baseServer}/stats?sid=1&json=1`;
+                const response = await fetch(PROXY + encodeURIComponent(statsUrl));
+                const data = await response.json();
+                
+                // Actualizar nombre de estación
+                if (data.servertitle) {
+                    stationNameEl.textContent = data.servertitle.substring(0, 50);
+                }
+                
+                // Procesar canción
+                let fullTitle = data.songtitle || '--';
+                let artist = '';
+                let title = fullTitle;
+                
+                // Intentar separar artista - título
+                if (fullTitle.includes(' - ')) {
+                    const parts = fullTitle.split(' - ');
+                    artist = parts[0];
+                    title = parts.slice(1).join(' - ');
+                } else if (fullTitle.includes('–')) {
+                    const parts = fullTitle.split('–');
+                    artist = parts[0].trim();
+                    title = parts[1].trim();
+                }
+                
+                songTitleEl.textContent = title || '--';
+                artistEl.textContent = artist || '--';
+                listenersEl.textContent = data.currentlisteners || '--';
+                bitrateEl.textContent = data.bitrate || '--';
+                
+                // Buscar imagen de álbum si cambió la canción
+                const currentSong = `${artist}|${title}`;
+                if (currentSong !== lastSong && artist && title) {
+                    lastSong = currentSong;
+                    fetchAlbumArt(artist, title);
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                songTitleEl.textContent = '--';
+                artistEl.textContent = 'Sin conexión';
+                listenersEl.textContent = '--';
+                bitrateEl.textContent = '--';
+            }
+        }
+        
+        async function fetchAlbumArt(artist, title) {
+            try {
+                const query = encodeURIComponent(`${artist} ${title}`);
+                const itunesUrl = `https://itunes.apple.com/search?term=${query}&entity=song&limit=1`;
+                const response = await fetch(itunesUrl);
+                const data = await response.json();
+                if (data.results && data.results.length > 0) {
+                    const imgUrl = data.results[0].artworkUrl100.replace('100x100', '600x600');
+                    document.getElementById('cover').src = imgUrl;
+                }
+            } catch(e) {
+                console.log('Album art not found');
+            }
+        }
+        
+        // Iniciar actualización
+        fetchData();
+        setInterval(fetchData, 10000);
+    </script>
+</body>
+</html>
