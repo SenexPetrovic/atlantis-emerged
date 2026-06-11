@@ -204,6 +204,43 @@ body{
 }    
 
 </style>
+
+<script>
+// Leer username de la URL (ej: ?username=francisc)
+const urlParams = new URLSearchParams(window.location.search);
+const USERNAME = urlParams.get('username') || 'francisc'; // valor por defecto
+
+// Reescribir todos los elementos con data-username ANTES de que carguen los scripts
+document.addEventListener('DOMContentLoaded', function() {
+    // Todos los elementos que usan data-username
+    const elements = document.querySelectorAll('[data-username]');
+    elements.forEach(el => {
+        el.setAttribute('data-username', USERNAME);
+    });
+    
+    // También actualizar el div de recent tracks
+    const recentDiv = document.querySelector('.cc_recenttracks_list');
+    if (recentDiv) {
+        recentDiv.setAttribute('data-username', USERNAME);
+    }
+    
+    // Ahora sí, cargar los scripts dinámicamente
+    const script1 = document.createElement('script');
+    script1.src = 'https://falcon.shoutca.st/system/streaminfo.js';
+    document.body.appendChild(script1);
+    
+    const script2 = document.createElement('script');
+    script2.src = 'https://falcon.shoutca.st/system/recenttracks.js';
+    document.body.appendChild(script2);
+});
+</script>
+
+<!-- REMUEVE las etiquetas script originales del body -->
+<!-- Ya no necesitas:
+<script src="https://falcon.shoutca.st/system/streaminfo.js"></script>
+<script src="https://falcon.shoutca.st/system/recenttracks.js"></script>
+-->
+    
 </head>
 
 <body>
