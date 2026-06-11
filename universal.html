@@ -2,113 +2,229 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Radio Widget</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Universal Radio Widget - SL Stream System</title>
     <style>
-        body {
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             min-height: 100vh;
             background: linear-gradient(135deg, #0a2a3a 0%, #04121c 100%);
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
+
         .widget {
-            max-width: 500px;
+            max-width: 550px;
             width: 100%;
             background: rgba(0, 30, 45, 0.85);
             backdrop-filter: blur(10px);
             border-radius: 28px;
             border: 1px solid rgba(0, 255, 255, 0.3);
             padding: 25px;
-            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.1);
         }
+
         .station-name {
-            font-size: 18px;
+            text-align: center;
+            font-size: 16px;
             letter-spacing: 2px;
             color: #8ffcff;
             margin-bottom: 20px;
+            text-transform: uppercase;
+            font-weight: bold;
+            word-break: break-word;
         }
+
         .cover {
             width: 180px;
             height: 180px;
             margin: 0 auto 20px;
+            display: block;
             border-radius: 20px;
             object-fit: cover;
             background: #0a2a3a;
-            box-shadow: 0 0 20px rgba(0,255,255,0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
         }
-        .song-title {
-            font-size: 22px;
-            font-weight: bold;
+
+        .now-playing {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .now-playing-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: #8ffcff;
+            opacity: 0.7;
             margin-bottom: 8px;
         }
-        .artist {
-            font-size: 16px;
-            color: #8ffcff;
-            margin-bottom: 20px;
+
+        .song-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            word-break: break-word;
         }
+
+        .artist {
+            font-size: 15px;
+            color: #8ffcff;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
         .stats {
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 20px;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            padding: 12px 0;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
         }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
         .stat-value {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
             color: #8ffcff;
         }
-        .stat-label {
-            font-size: 11px;
-            opacity: 0.7;
-        }
-        .live {
+
+        .status-live {
             color: #00ff88;
             text-shadow: 0 0 8px #00ff88;
             animation: pulse 1.5s infinite;
         }
+
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-        .error {
-            background: rgba(255,0,0,0.3);
-            padding: 10px;
-            border-radius: 8px;
+
+        .history-title {
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: #8ffcff;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .history-list {
+            max-height: 250px;
+            overflow-y: auto;
             font-size: 12px;
+            color: #cceef5;
+        }
+
+        .history-item {
+            padding: 8px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .history-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #0a2a3a;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-song {
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .history-artist {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 9px;
+            opacity: 0.4;
+            margin-top: 15px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8ffcff;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
     <div class="widget" id="widget">
-        <div class="station-name" id="stationName">Radio Station</div>
+        <div class="station-name" id="stationName">Loading...</div>
         <img class="cover" id="cover" src="" alt="Album Art">
-        <div class="song-title" id="songTitle">--</div>
-        <div class="artist" id="artist">--</div>
+        <div class="now-playing">
+            <div class="now-playing-label">NOW PLAYING</div>
+            <div class="song-title" id="songTitle">--</div>
+            <div class="artist" id="artist">--</div>
+        </div>
         <div class="stats">
-            <div>
+            <div class="stat">
                 <div class="stat-value" id="listeners">--</div>
                 <div class="stat-label">LISTENERS</div>
             </div>
-            <div>
+            <div class="stat">
                 <div class="stat-value" id="bitrate">--</div>
                 <div class="stat-label">KBPS</div>
             </div>
-            <div>
-                <div class="stat-value live" id="status">LIVE</div>
+            <div class="stat">
+                <div class="stat-value status-live" id="status">LIVE</div>
                 <div class="stat-label">STATUS</div>
             </div>
+        </div>
+        <div class="history-title">RECENT TRACKS</div>
+        <div class="history-list" id="historyList">
+            <div class="history-item">Waiting for tracks...</div>
+        </div>
+        <div class="footer">
+            SL Stream Widget System | Universal Edition
         </div>
     </div>
 
     <script>
+        // ========== CONFIGURACIÓN ==========
         // Leer URL de los parámetros
         const urlParams = new URLSearchParams(window.location.search);
         let STREAM_URL = urlParams.get('url') || urlParams.get('stream');
+        
+        // LOGO por defecto (cámbialo por tu logo)
+        const DEFAULT_LOGO = 'https://via.placeholder.com/180x180/0a2a3a/8ffcff?text=Radio';
         
         // Si no hay URL, usar demo
         if (!STREAM_URL) {
@@ -121,82 +237,175 @@
         // Proxy CORS gratuito
         const PROXY = 'https://api.allorigins.win/raw?url=';
         
-        // Elementos DOM
+        // ========== ESTADO GLOBAL ==========
+        let history = [];      // Array de { title, artist, albumArt }
+        let lastSongKey = '';
+        let updateInterval = null;
+        
+        // ========== ELEMENTOS DOM ==========
         const stationNameEl = document.getElementById('stationName');
+        const coverEl = document.getElementById('cover');
         const songTitleEl = document.getElementById('songTitle');
         const artistEl = document.getElementById('artist');
         const listenersEl = document.getElementById('listeners');
         const bitrateEl = document.getElementById('bitrate');
+        const statusEl = document.getElementById('status');
+        const historyListEl = document.getElementById('historyList');
         
-        let lastSong = '';
+        // ========== FUNCIONES ==========
         
+        // Buscar imagen de álbum en iTunes
+        async function fetchAlbumArt(artist, title) {
+            if (!artist && !title) return null;
+            
+            const query = encodeURIComponent(`${artist} ${title}`.trim());
+            const itunesUrl = `https://itunes.apple.com/search?term=${query}&entity=song&limit=1`;
+            
+            try {
+                const response = await fetch(itunesUrl);
+                const data = await response.json();
+                if (data.results && data.results.length > 0) {
+                    // iTunes devuelve artworkUrl100, reemplazar por 600x600
+                    return data.results[0].artworkUrl100.replace('100x100', '600x600');
+                }
+            } catch (e) {
+                console.log('iTunes fetch failed:', e);
+            }
+            return null;
+        }
+        
+        // Renderizar el historial
+        function renderHistory() {
+            if (history.length === 0) {
+                historyListEl.innerHTML = '<div class="history-item">No recent tracks yet...</div>';
+                return;
+            }
+            
+            historyListEl.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <img src="${item.albumArt || DEFAULT_LOGO}" alt="cover" onerror="this.src='${DEFAULT_LOGO}'">
+                    <div class="history-info">
+                        <div class="history-song">${escapeHtml(item.title)}</div>
+                        <div class="history-artist">${escapeHtml(item.artist)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Agregar canción al historial
+        function addToHistory(title, artist, albumArt) {
+            const item = {
+                title: title || 'Unknown',
+                artist: artist || 'Unknown',
+                albumArt: albumArt || DEFAULT_LOGO,
+                timestamp: Date.now()
+            };
+            
+            history.unshift(item);
+            if (history.length > 10) history.pop();
+            renderHistory();
+        }
+        
+        // Escapar HTML para seguridad
+        function escapeHtml(str) {
+            if (!str) return '--';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        // Procesar y separar artista/título
+        function parseTitle(fullTitle) {
+            if (!fullTitle || fullTitle === '--') {
+                return { artist: '', title: '--' };
+            }
+            
+            let artist = '';
+            let title = fullTitle;
+            
+            // Intentar diferentes separadores
+            if (fullTitle.includes(' - ')) {
+                const parts = fullTitle.split(' - ');
+                artist = parts[0];
+                title = parts.slice(1).join(' - ');
+            } else if (fullTitle.includes('–')) {
+                const parts = fullTitle.split('–');
+                artist = parts[0].trim();
+                title = parts[1].trim();
+            } else if (fullTitle.includes(' - ')) {
+                const parts = fullTitle.split(' - ');
+                artist = parts[0];
+                title = parts[1];
+            }
+            
+            return { artist, title };
+        }
+        
+        // Obtener datos del servidor
         async function fetchData() {
             try {
                 // Probar endpoint Shoutcast v2
                 const statsUrl = `${baseServer}/stats?sid=1&json=1`;
                 const response = await fetch(PROXY + encodeURIComponent(statsUrl));
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
                 const data = await response.json();
                 
                 // Actualizar nombre de estación
                 if (data.servertitle) {
-                    stationNameEl.textContent = data.servertitle.substring(0, 50);
+                    let stationName = data.servertitle;
+                    if (stationName.length > 60) stationName = stationName.substring(0, 57) + '...';
+                    stationNameEl.textContent = stationName;
+                } else if (data.serverurl) {
+                    stationNameEl.textContent = data.serverurl.replace('https://', '').replace('http://', '');
                 }
                 
                 // Procesar canción
-                let fullTitle = data.songtitle || '--';
-                let artist = '';
-                let title = fullTitle;
-                
-                // Intentar separar artista - título
-                if (fullTitle.includes(' - ')) {
-                    const parts = fullTitle.split(' - ');
-                    artist = parts[0];
-                    title = parts.slice(1).join(' - ');
-                } else if (fullTitle.includes('–')) {
-                    const parts = fullTitle.split('–');
-                    artist = parts[0].trim();
-                    title = parts[1].trim();
-                }
+                const fullTitle = data.songtitle || '--';
+                const { artist, title } = parseTitle(fullTitle);
                 
                 songTitleEl.textContent = title || '--';
                 artistEl.textContent = artist || '--';
                 listenersEl.textContent = data.currentlisteners || '--';
                 bitrateEl.textContent = data.bitrate || '--';
+                statusEl.textContent = 'LIVE';
+                statusEl.style.color = '#00ff88';
                 
-                // Buscar imagen de álbum si cambió la canción
-                const currentSong = `${artist}|${title}`;
-                if (currentSong !== lastSong && artist && title) {
-                    lastSong = currentSong;
-                    fetchAlbumArt(artist, title);
+                // Verificar si cambió la canción
+                const currentSongKey = `${artist}|${title}`;
+                if (currentSongKey !== lastSongKey && title !== '--') {
+                    lastSongKey = currentSongKey;
+                    
+                    // Buscar imagen del álbum
+                    const albumArt = await fetchAlbumArt(artist, title);
+                    if (albumArt) {
+                        coverEl.src = albumArt;
+                        addToHistory(title, artist, albumArt);
+                    } else {
+                        coverEl.src = DEFAULT_LOGO;
+                        addToHistory(title, artist, DEFAULT_LOGO);
+                    }
                 }
                 
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Fetch error:', error);
+                statusEl.textContent = 'OFFLINE';
+                statusEl.style.color = '#ff4444';
                 songTitleEl.textContent = '--';
-                artistEl.textContent = 'Sin conexión';
+                artistEl.textContent = '--';
                 listenersEl.textContent = '--';
                 bitrateEl.textContent = '--';
             }
         }
         
-        async function fetchAlbumArt(artist, title) {
-            try {
-                const query = encodeURIComponent(`${artist} ${title}`);
-                const itunesUrl = `https://itunes.apple.com/search?term=${query}&entity=song&limit=1`;
-                const response = await fetch(itunesUrl);
-                const data = await response.json();
-                if (data.results && data.results.length > 0) {
-                    const imgUrl = data.results[0].artworkUrl100.replace('100x100', '600x600');
-                    document.getElementById('cover').src = imgUrl;
-                }
-            } catch(e) {
-                console.log('Album art not found');
-            }
-        }
-        
-        // Iniciar actualización
+        // ========== INICIALIZAR ==========
+        coverEl.src = DEFAULT_LOGO;
         fetchData();
-        setInterval(fetchData, 10000);
+        updateInterval = setInterval(fetchData, 10000); // Actualizar cada 10 segundos
     </script>
 </body>
 </html>
