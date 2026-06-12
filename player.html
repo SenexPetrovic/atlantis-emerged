@@ -1,50 +1,81 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Atlantis Emerged Radio</title>
-
-  <style>
-    body {
-      margin: 0;
-      background: #0b0f1a;
-      color: white;
-      font-family: Arial;
-      text-align: center;
-    }
-
-    header {
-      padding: 20px;
-      font-size: 22px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-    .container {
-      margin-top: 40px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mi Radio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .player-card {
+            background: rgba(0,0,0,0.6);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .status {
+            font-size: 14px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        audio {
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 30px;
+        }
+        button {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        .info {
+            font-size: 12px;
+            margin-top: 30px;
+            opacity: 0.7;
+        }
+    </style>
 </head>
-
 <body>
-
-  <header>
-    🌊 ATLANTIS EMERGED RADIO
-  </header>
-
-  <div class="container">
-
-    <!-- SHOUTCAST WIDGET -->
-    <div class="cc_player"
-         data-username="francisc"
-         data-size="lg"
-         data-style="light">
-        Loading ...
+    <div class="player-card">
+        <h1>📻 Atlantis Emerged Radio Player</h1>
+        <div class="status">🔴 En Vivo</div>
+        
+        <!-- Este es tu reproductor -->
+        <audio id="radioPlayer" controls autoplay>
+            <source src="https://francisc-gecko.radioca.st/stream" type="audio/mpeg">
+            Tu navegador no soporta audio.
+        </audio>
+        
+        <button onclick="document.getElementById('radioPlayer').play()">▶ Reproducir</button>
+        <div class="info">
+            Guarda esta página en tu pantalla de inicio<br>
+            (⋮ → Añadir a la pantalla de inicio)
+        </div>
     </div>
-
-  </div>
-
-  <script src="https://falcon.shoutca.st/system/player.js"></script>
-
 </body>
 </html>
