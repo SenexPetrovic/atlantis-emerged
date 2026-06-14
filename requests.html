@@ -222,7 +222,6 @@ tr:hover{
     font-size:16px;
 }
 
-/* Empty State */
 .empty-state{
     text-align:center;
     padding:60px;
@@ -343,8 +342,6 @@ tr:hover{
     // ============================================
     // ATLANTIS EMERGED — OFFICIAL MUSIC LIBRARY
     // ============================================
-    // To add more songs, simply edit the JSON array below.
-    // Each entry requires: artist, title, path (filename in Centova media folder)
     
     const MUSIC_LIBRARY = [
         { id: 1, artist: "The Weeknd", title: "Blinding Lights", path: "the_weeknd_blinding_lights.mp3", bpm: 171 },
@@ -374,10 +371,9 @@ tr:hover{
     // ============================================
     const CENTOVA_API_URL = "https://francisc-gecko.radioca.st/api.php";
     const CENTOVA_USER = "francisc";
-    const CENTOVA_PASS = "TU_CONTRASEÑA";  // ← UPDATE THIS
+    const CENTOVA_PASS = "YOUR_PASSWORD_HERE";  // ← IMPORTANT: Update this
     const CENTOVA_PLAYLIST = 1;
     
-    // UI State
     let currentFilter = "";
     
     function showToast(message, type = "info") {
@@ -421,7 +417,7 @@ tr:hover{
             }
         } catch (error) {
             console.error("API Error:", error);
-            showToast(`⚠️ Unable to submit request. Please try again later.`, "error");
+            showToast(`Unable to submit request. Please try again.`, "error");
             return false;
         }
     }
@@ -488,7 +484,6 @@ tr:hover{
         const song = MUSIC_LIBRARY.find(s => s.id === id);
         if (!song) return;
         
-        // Find and disable button temporarily
         const buttons = document.querySelectorAll('.btn-request');
         let targetBtn = null;
         for (let btn of buttons) {
@@ -501,7 +496,7 @@ tr:hover{
         
         if (targetBtn) {
             targetBtn.disabled = true;
-            targetBtn.textContent = "⏳ Processing...";
+            targetBtn.textContent = "Processing...";
         }
         
         await submitRequest(song);
@@ -527,7 +522,7 @@ tr:hover{
     function init() {
         renderLibrary("");
         initSearch();
-        showToast("Welcome. Select a track to submit your request.", "info");
+        showToast("Select a track to submit your request.", "info");
         setTimeout(() => {
             const toast = document.getElementById("toastMsg");
             if (toast && toast.style.display !== "none") {
