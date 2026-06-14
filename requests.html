@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>Atlantis Emerged - Pide tu Canción</title>
+<title>Atlantis Emerged Radio — Song Requests</title>
 
 <style>
 
@@ -24,7 +24,7 @@ body{
         #0b2e46 35%,
         #051522 100%);
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
     color:white;
 }
 
@@ -46,21 +46,32 @@ body{
     filter:drop-shadow(0 0 12px rgba(0,255,255,.4));
 }
 
-.title{
+.brand{
     color:#8ffcff;
-    font-size:28px;
-    letter-spacing:3px;
+    font-size:14px;
+    letter-spacing:4px;
     text-transform:uppercase;
+    margin-bottom:8px;
+    opacity:0.8;
+}
+
+.title{
+    color:#ffffff;
+    font-size:32px;
+    letter-spacing:2px;
+    font-weight:300;
     margin-bottom:8px;
 }
 
 .subtitle{
-    color:#aaccee;
-    font-size:16px;
-    opacity:0.9;
+    color:#bbddff;
+    font-size:15px;
+    max-width:600px;
+    margin:0 auto;
+    line-height:1.5;
 }
 
-/* Barra de búsqueda */
+/* Search Bar */
 .search-box{
     background:rgba(0,20,35,.7);
     border:1px solid rgba(0,255,255,.3);
@@ -82,7 +93,7 @@ body{
     padding:14px 20px;
     border-radius:40px;
     color:white;
-    font-size:16px;
+    font-size:15px;
     outline:none;
     transition:all 0.3s;
 }
@@ -97,14 +108,15 @@ body{
 }
 
 .stats{
-    font-size:14px;
+    font-size:13px;
     color:#8ffcff;
     background:rgba(0,0,0,0.3);
     padding:8px 18px;
     border-radius:40px;
+    font-weight:500;
 }
 
-/* Tabla de canciones */
+/* Table Container */
 .songs-table-container{
     background:rgba(0,20,35,.6);
     border:1px solid rgba(0,255,255,.2);
@@ -116,7 +128,7 @@ body{
 table{
     width:100%;
     border-collapse:collapse;
-    font-size:15px;
+    font-size:14px;
 }
 
 th{
@@ -124,7 +136,7 @@ th{
     color:#8ffcff;
     padding:15px 12px;
     text-align:left;
-    font-weight:bold;
+    font-weight:600;
     letter-spacing:1px;
     border-bottom:2px solid rgba(0,255,255,.3);
 }
@@ -136,67 +148,86 @@ td{
 }
 
 tr:hover{
-    background:rgba(0,255,255,.08);
+    background:rgba(0,255,255,.06);
     transition:0.2s;
 }
 
-/* Botón PROGRAMAR */
-.btn-cue{
-    background:linear-gradient(135deg, #0a5f5f, #0a3f5f);
-    border:1px solid #8ffcff;
-    color:#8ffcff;
-    font-size:13px;
-    font-weight:bold;
-    padding:8px 18px;
-    border-radius:40px;
+/* Request Button */
+.btn-request{
+    background:rgba(0,60,80,0.8);
+    border:1px solid #4a9fbf;
+    color:#c0f0ff;
+    font-size:12px;
+    font-weight:600;
+    padding:7px 16px;
+    border-radius:30px;
     cursor:pointer;
     transition:all 0.2s;
-    letter-spacing:1px;
+    letter-spacing:0.5px;
 }
 
-.btn-cue:hover{
-    background:linear-gradient(135deg, #0a7f7f, #0a5f7f);
+.btn-request:hover{
+    background:#0a6a8a;
+    border-color:#8ffcff;
+    color:white;
     transform:scale(1.02);
-    box-shadow:0 0 8px rgba(0,255,255,.4);
 }
 
-.btn-cue:active{
+.btn-request:active{
     transform:scale(0.98);
 }
 
-.btn-cue:disabled{
+.btn-request:disabled{
     opacity:0.5;
     cursor:not-allowed;
     transform:none;
 }
 
-/* Mensaje de estado flotante */
+/* Status Toast */
 .toast-message{
     position:fixed;
     bottom:30px;
     left:50%;
     transform:translateX(-50%);
-    background:rgba(0,0,0,0.9);
-    border:1px solid #8ffcff;
+    background:rgba(0,0,0,0.92);
+    border:1px solid #4a9fbf;
     border-radius:50px;
     padding:12px 28px;
-    color:#8ffcff;
-    font-size:15px;
+    color:#c0f0ff;
+    font-size:14px;
     z-index:1000;
     backdrop-filter:blur(8px);
-    box-shadow:0 0 20px rgba(0,255,255,.2);
+    box-shadow:0 0 20px rgba(0,100,150,.3);
     transition:opacity 0.3s;
     pointer-events:none;
+    font-weight:500;
+    white-space:nowrap;
 }
 
 .toast-message.success{
-    border-color:#2aff8f;
-    color:#2aff8f;
+    border-color:#2aaf8f;
+    color:#aaffdd;
 }
 
 .toast-message.error{
-    border-color:#ff6a6a;
-    color:#ffaaaa;
+    border-color:#cf6a6a;
+    color:#ffbbbb;
+}
+
+/* Loading */
+.loading{
+    text-align:center;
+    padding:60px;
+    color:#8ffcff;
+    font-size:16px;
+}
+
+/* Empty State */
+.empty-state{
+    text-align:center;
+    padding:60px;
+    color:#88aacc;
+    font-size:16px;
 }
 
 /* Footer */
@@ -218,25 +249,24 @@ tr:hover{
     text-decoration:underline;
 }
 
-/* Loading */
-.loading{
-    text-align:center;
-    padding:40px;
-    color:#8ffcff;
-}
-
 /* Responsive */
 @media (max-width: 768px){
     th, td{
         padding:8px 6px;
         font-size:12px;
     }
-    .btn-cue{
+    .btn-request{
         padding:5px 12px;
-        font-size:11px;
+        font-size:10px;
     }
     .title{
-        font-size:22px;
+        font-size:24px;
+    }
+    .toast-message{
+        white-space:normal;
+        text-align:center;
+        max-width:90%;
+        font-size:12px;
     }
 }
 
@@ -262,12 +292,12 @@ tr:hover{
     }
     td::before{
         content:attr(data-label);
-        font-weight:bold;
+        font-weight:600;
         color:#8ffcff;
         width:100px;
         text-align:left;
     }
-    .btn-cue{
+    .btn-request{
         width:100%;
         margin-top:5px;
     }
@@ -280,76 +310,76 @@ tr:hover{
 <div class="container">
     
     <div class="header">
-        <img src="logo.png" alt="Atlantis Emerged" class="logo">
-        <div class="title">🎤 PIDE TU CANCIÓN</div>
-        <div class="subtitle">"Dime qué quieres escuchar... y la pongo en mi cola"</div>
+        <img src="logo.png" alt="Atlantis Emerged Radio" class="logo" onerror="this.style.display='none'">
+        <div class="brand">ATLANTIS EMERGED RADIO NETWORK</div>
+        <div class="title">Request a Song</div>
+        <div class="subtitle">
+            Browse our music library and submit your requests.<br>
+            Approved tracks will be added to the broadcast queue.
+        </div>
     </div>
 
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="🔍 Buscar por artista o canción...">
-        <div class="stats" id="statsCount">🎵 Cargando canciones...</div>
+        <input type="text" id="searchInput" placeholder="Search by artist or song title...">
+        <div class="stats" id="statsCount">— tracks available</div>
     </div>
 
     <div class="songs-table-container">
         <div id="songsListContainer">
-            <div class="loading">🌊 Cargando catálogo de Atlantis Emerged...</div>
+            <div class="loading">Loading music library...</div>
         </div>
     </div>
 
     <div class="footer">
-        🌊 Atlantis Emerged Radio — Las canciones se añaden a la cola y suenan cuando termine la actual.<br>
-        <a href="index.html" target="_blank">📻 Ir al reproductor principal</a>
+        <strong>Atlantis Emerged Radio</strong> — Ambient · Chillout · Deep Electronic<br>
+        Requests are processed in real time and added to the AutoDJ queue.<br>
+        <a href="index.html">← Return to Player</a>
     </div>
 </div>
 
-<!-- Toast para mensajes -->
 <div id="toastMsg" class="toast-message" style="display:none;"></div>
 
 <script>
     // ============================================
-    // CATÁLOGO DE CANCIONES DE ATLANTIS EMERGED
+    // ATLANTIS EMERGED — OFFICIAL MUSIC LIBRARY
     // ============================================
-    // En esta versión inicial, el catálogo está incrustado.
-    // En el futuro podrías cargarlo desde un archivo JSON externo
-    // o desde la API de Centova (media.list)
+    // To add more songs, simply edit the JSON array below.
+    // Each entry requires: artist, title, path (filename in Centova media folder)
     
-    const SONGS_CATALOG = [
-        { id: 1, artist: "The Weeknd", title: "Blinding Lights", bpm: 171, path: "the_weeknd_blinding_lights.mp3" },
-        { id: 2, artist: "Dua Lipa", title: "Levitating", bpm: 103, path: "dua_lipa_levitating.mp3" },
-        { id: 3, artist: "Bad Bunny", title: "Tití Me Preguntó", bpm: 120, path: "bad_bunny_titi_me_pregunto.mp3" },
-        { id: 4, artist: "Rosalía", title: "DESPECHÁ", bpm: 128, path: "rosalia_despecha.mp3" },
-        { id: 5, artist: "Kendrick Lamar", title: "Not Like Us", bpm: 101, path: "kendrick_lamar_not_like_us.mp3" },
-        { id: 6, artist: "Fred again..", title: "Delilah (pull me out of this)", bpm: 130, path: "fred_again_delilah.mp3" },
-        { id: 7, artist: "RÜFÜS DU SOL", title: "Innerbloom", bpm: 120, path: "rufus_du_sol_innerbloom.mp3" },
-        { id: 8, artist: "Lane 8", title: "The Rope", bpm: 122, path: "lane_8_the_rope.mp3" },
-        { id: 9, artist: "Ben Böhmer", title: "Beyond Beliefs", bpm: 123, path: "ben_bohmer_beyond_beliefs.mp3" },
-        { id: 10, artist: "Monolink", title: "Return to Oz", bpm: 107, path: "monolink_return_to_oz.mp3" },
-        { id: 11, artist: "WhoMadeWho", title: "Kids", bpm: 120, path: "whomadewho_kids.mp3" },
-        { id: 12, artist: "Jan Blomqvist", title: "Drift", bpm: 118, path: "jan_blomqvist_drift.mp3" },
-        { id: 13, artist: "NTO", title: "Invisible", bpm: 124, path: "nto_invisible.mp3" },
-        { id: 14, artist: "Worakls", title: "Salzburg", bpm: 125, path: "worakls_salzburg.mp3" },
-        { id: 15, artist: "Joachim Pastor", title: "Eden", bpm: 122, path: "joachim_pastor_eden.mp3" },
-        { id: 16, artist: "Joris Delacroix", title: "Origami", bpm: 121, path: "joris_delacroix_origami.mp3" }
+    const MUSIC_LIBRARY = [
+        { id: 1, artist: "The Weeknd", title: "Blinding Lights", path: "the_weeknd_blinding_lights.mp3", bpm: 171 },
+        { id: 2, artist: "Dua Lipa", title: "Levitating", path: "dua_lipa_levitating.mp3", bpm: 103 },
+        { id: 3, artist: "Bad Bunny", title: "Tití Me Preguntó", path: "bad_bunny_titi_me_pregunto.mp3", bpm: 120 },
+        { id: 4, artist: "Rosalía", title: "DESPECHÁ", path: "rosalia_despecha.mp3", bpm: 128 },
+        { id: 5, artist: "Kendrick Lamar", title: "Not Like Us", path: "kendrick_lamar_not_like_us.mp3", bpm: 101 },
+        { id: 6, artist: "Fred again..", title: "Delilah (pull me out of this)", path: "fred_again_delilah.mp3", bpm: 130 },
+        { id: 7, artist: "RÜFÜS DU SOL", title: "Innerbloom", path: "rufus_du_sol_innerbloom.mp3", bpm: 120 },
+        { id: 8, artist: "Lane 8", title: "The Rope", path: "lane_8_the_rope.mp3", bpm: 122 },
+        { id: 9, artist: "Ben Böhmer", title: "Beyond Beliefs", path: "ben_bohmer_beyond_beliefs.mp3", bpm: 123 },
+        { id: 10, artist: "Monolink", title: "Return to Oz", path: "monolink_return_to_oz.mp3", bpm: 107 },
+        { id: 11, artist: "WhoMadeWho", title: "Kids", path: "whomadewho_kids.mp3", bpm: 120 },
+        { id: 12, artist: "Jan Blomqvist", title: "Drift", path: "jan_blomqvist_drift.mp3", bpm: 118 },
+        { id: 13, artist: "NTO", title: "Invisible", path: "nto_invisible.mp3", bpm: 124 },
+        { id: 14, artist: "Worakls", title: "Salzburg", path: "worakls_salzburg.mp3", bpm: 125 },
+        { id: 15, artist: "Joachim Pastor", title: "Eden", path: "joachim_pastor_eden.mp3", bpm: 122 },
+        { id: 16, artist: "Joris Delacroix", title: "Origami", path: "joris_delacroix_origami.mp3", bpm: 121 },
+        { id: 17, artist: "Booka Shade", title: "In White Rooms", path: "booka_shade_in_white_rooms.mp3", bpm: 128 },
+        { id: 18, artist: "Kolsch", title: "Grey", path: "kolsch_grey.mp3", bpm: 124 },
+        { id: 19, artist: "Adriatique", title: "Ray", path: "adriatique_ray.mp3", bpm: 122 },
+        { id: 20, artist: "Mind Against", title: "Walking Away", path: "mind_against_walking_away.mp3", bpm: 124 }
     ];
     
     // ============================================
-    // CONFIGURACIÓN DE LA API DE CENTOVA
-    // ¡CAMBIAR POR SUS DATOS REALES!
+    // CENTOVA API CONFIGURATION
     // ============================================
-    const CENTOVA_API_URL = "https://francisc-gecko.radioca.st/api.php";  // O tu endpoint
-    // IMPORTANTE: Por seguridad, lo ideal es que esta página hable con un proxy propio
-    // que guarde las credenciales. Pero para empezar:
-    const CENTOVA_USER = "francisc";        // Tu usuario de Centova
-    const CENTOVA_PASS = "TU_CONTRASEÑA_AQUI";  // ¡CAMBIA ESTO!
-    const CENTOVA_PLAYLIST = 1;              // ID de la playlist (normalmente 1)
+    const CENTOVA_API_URL = "https://francisc-gecko.radioca.st/api.php";
+    const CENTOVA_USER = "francisc";
+    const CENTOVA_PASS = "TU_CONTRASEÑA";  // ← UPDATE THIS
+    const CENTOVA_PLAYLIST = 1;
     
-    // URL alternativa: algunas radios usan shoutca.st con otro endpoint
-    // Si la API directa no funciona, necesitaremos un pequeño script proxy
-    
-    // Variables de estado
+    // UI State
     let currentFilter = "";
     
-    // Función para mostrar toast (mensaje flotante)
     function showToast(message, type = "info") {
         const toast = document.getElementById("toastMsg");
         toast.textContent = message;
@@ -362,16 +392,12 @@ tr:hover{
                 toast.style.display = "none";
                 toast.style.opacity = "1";
             }, 300);
-        }, 4000);
+        }, 3500);
     }
     
-    // Función para enviar la canción a Centova vía API
-    async function sendToCentova(song) {
-        // Mostrar mensaje de "preparando"
-        showToast(`🎧 "Déjame encontrar ese punto..." Preparando ${song.title}...`, "info");
+    async function submitRequest(song) {
+        showToast(`Processing request: ${song.artist} - ${song.title}...`, "info");
         
-        // Construir la URL de la API de Centova
-        // Formato según documentación de Centova Cast
         const params = new URLSearchParams();
         params.append("xm", "playlist.add");
         params.append("f", "json");
@@ -380,66 +406,51 @@ tr:hover{
         params.append("a[playlist]", CENTOVA_PLAYLIST);
         params.append("a[trackpath]", song.path);
         
-        const apiUrl = `${CENTOVA_API_URL}?${params.toString()}`;
-        
         try {
-            // Opción 1: Intentar con fetch directamente
-            const response = await fetch(apiUrl, {
+            const response = await fetch(`${CENTOVA_API_URL}?${params.toString()}`, {
                 method: "GET",
-                mode: "cors",  // Intentar CORS
-                headers: {
-                    "Accept": "application/json"
-                }
+                mode: "cors",
+                headers: { "Accept": "application/json" }
             });
             
             if (response.ok) {
-                const data = await response.json().catch(() => ({}));
-                showToast(`✅ "${song.title} - ${song.artist}" está en mi cola. Ahora sí, aquí la tienes... 🎵`, "success");
+                showToast(`✓ "${song.title}" added to queue.`, "success");
                 return true;
             } else {
                 throw new Error(`HTTP ${response.status}`);
             }
         } catch (error) {
-            console.error("Error al enviar a Centova:", error);
-            
-            // Si falla por CORS o conexión, mostramos un mensaje explicativo
-            showToast(`⚠️ No se pudo programar "${song.title}". El sistema de peticiones está en modo demostración.`, "error");
-            
-            // En modo demostración, simulamos éxito para no frustrar al usuario
-            // En producción, esto debería enviarse a un proxy
+            console.error("API Error:", error);
+            showToast(`⚠️ Unable to submit request. Please try again later.`, "error");
             return false;
         }
     }
     
-    // Renderizar la tabla de canciones
-    function renderSongs(filter = "") {
+    function renderLibrary(filter = "") {
         const container = document.getElementById("songsListContainer");
         
-        // Filtrar canciones
-        const filtered = SONGS_CATALOG.filter(song => 
+        const filtered = MUSIC_LIBRARY.filter(song => 
             song.title.toLowerCase().includes(filter.toLowerCase()) ||
             song.artist.toLowerCase().includes(filter.toLowerCase())
         );
         
-        // Actualizar contador
         const statsDiv = document.getElementById("statsCount");
-        statsDiv.innerHTML = `🎵 ${filtered.length} canciones disponibles`;
+        statsDiv.innerHTML = `🎵 ${filtered.length} of ${MUSIC_LIBRARY.length} tracks`;
         
         if (filtered.length === 0) {
-            container.innerHTML = `<div style="padding:40px;text-align:center;color:#88aacc;">🌊 No encontré canciones con "${filter}"... Prueba con otro nombre</div>`;
+            container.innerHTML = `<div class="empty-state">No matching tracks found for "${escapeHtml(filter)}".</div>`;
             return;
         }
         
-        // Construir tabla HTML
         let html = `
-            <table id="songsTable">
+            <table>
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>ARTISTA</th>
-                        <th>CANCION</th>
+                        <th>Artist</th>
+                        <th>Title</th>
                         <th>BPM</th>
-                        <th>ACCIÓN</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -449,48 +460,40 @@ tr:hover{
             html += `
                 <tr>
                     <td data-label="#">${index + 1}</td>
-                    <td data-label="ARTISTA">${escapeHtml(song.artist)}</td>
-                    <td data-label="CANCION">${escapeHtml(song.title)}</td>
+                    <td data-label="Artist">${escapeHtml(song.artist)}</td>
+                    <td data-label="Title">${escapeHtml(song.title)}</td>
                     <td data-label="BPM">${song.bpm}</td>
-                    <td data-label="ACCIÓN">
-                        <button class="btn-cue" onclick="requestSong(${song.id})">🎛️ PROGRAMAR</button>
+                    <td data-label="Action">
+                        <button class="btn-request" onclick="requestTrack(${song.id})">Add to Queue</button>
                     </td>
                 </tr>
             `;
         });
         
-        html += `
-                </tbody>
-            </table>
-        `;
-        
+        html += `</tbody></table>`;
         container.innerHTML = html;
     }
     
-    // Función de escape para evitar XSS
     function escapeHtml(str) {
         if (!str) return "";
-        return str
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;");
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
     
-    // Función global para pedir una canción (llamada desde el botón)
-    window.requestSong = async function(songId) {
-        const song = SONGS_CATALOG.find(s => s.id === songId);
-        if (!song) {
-            showToast("❌ Canción no encontrada en el catálogo", "error");
-            return;
-        }
+    window.requestTrack = async function(id) {
+        const song = MUSIC_LIBRARY.find(s => s.id === id);
+        if (!song) return;
         
-        // Deshabilitar el botón temporalmente para evitar doble clic
-        const buttons = document.querySelectorAll('.btn-cue');
+        // Find and disable button temporarily
+        const buttons = document.querySelectorAll('.btn-request');
         let targetBtn = null;
         for (let btn of buttons) {
-            if (btn.textContent.includes("PROGRAMAR") && btn.onclick && btn.onclick.toString().includes(songId)) {
+            const onclickAttr = btn.getAttribute('onclick');
+            if (onclickAttr && onclickAttr.includes(id.toString())) {
                 targetBtn = btn;
                 break;
             }
@@ -498,44 +501,41 @@ tr:hover{
         
         if (targetBtn) {
             targetBtn.disabled = true;
-            targetBtn.textContent = "⏳ ENVIANDO...";
+            targetBtn.textContent = "⏳ Processing...";
         }
         
-        // Enviar a Centova
-        await sendToCentova(song);
+        await submitRequest(song);
         
-        // Restaurar botón después de un momento
         setTimeout(() => {
             if (targetBtn) {
                 targetBtn.disabled = false;
-                targetBtn.textContent = "🎛️ PROGRAMAR";
+                targetBtn.textContent = "Add to Queue";
             }
         }, 3000);
     };
     
-    // Buscador en tiempo real
-    function setupSearch() {
-        const searchInput = document.getElementById("searchInput");
-        if (searchInput) {
-            searchInput.addEventListener("input", (e) => {
+    function initSearch() {
+        const input = document.getElementById("searchInput");
+        if (input) {
+            input.addEventListener("input", (e) => {
                 currentFilter = e.target.value;
-                renderSongs(currentFilter);
+                renderLibrary(currentFilter);
             });
         }
     }
     
-    // Inicializar la página
     function init() {
-        renderSongs("");
-        setupSearch();
-        showToast("🌊 Bienvenido a Atlantis Emerged. Elige una canción para pedir...", "info");
+        renderLibrary("");
+        initSearch();
+        showToast("Welcome. Select a track to submit your request.", "info");
         setTimeout(() => {
             const toast = document.getElementById("toastMsg");
-            if (toast) toast.style.display = "none";
-        }, 3000);
+            if (toast && toast.style.display !== "none") {
+                toast.style.display = "none";
+            }
+        }, 4000);
     }
     
-    // Ejecutar cuando el DOM esté listo
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", init);
     } else {
@@ -543,32 +543,5 @@ tr:hover{
     }
 </script>
 
-<!-- 
-    NOTA IMPORTANTE SOBRE LA API DE CENTOVA:
-    
-    Si la API directa no funciona por temas de CORS o autenticación,
-    necesitarás un pequeño script proxy en tu propio servidor.
-    
-    Ejemplo de proxy en PHP (guardar como proxy.php):
-    
-    <?php
-        $api = "https://francisc-gecko.radioca.st/api.php";
-        $params = $_SERVER['QUERY_STRING'];
-        $url = $api . "?" . $params;
-        
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $response = curl_exec($ch);
-        curl_close($ch);
-        
-        header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
-        echo $response;
-    ?>
-    
-    Luego cambia CENTOVA_API_URL a "proxy.php"
--->
 </body>
 </html>
