@@ -1,3 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlantis Emerged Radio — Request a Song</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    margin:0; padding:20px; min-height:100vh;
+    background: radial-gradient(circle at top, #1a5f7a 0%, #0b2e46 35%, #051522 100%);
+    font-family: 'Segoe UI', Arial, sans-serif; color:white;
+}
+.container { max-width:1400px; margin:0 auto; }
+.header { text-align:center; margin-bottom:30px; }
+.logo { width:300px; max-width:80%; margin-bottom:15px; filter:drop-shadow(0 0 12px rgba(0,255,255,.4)); }
+.brand { color:#8ffcff; font-size:14px; letter-spacing:4px; text-transform:uppercase; margin-bottom:8px; }
+.title { color:#ffffff; font-size:32px; letter-spacing:2px; font-weight:300; margin-bottom:8px; }
+.subtitle { color:#bbddff; font-size:15px; max-width:600px; margin:0 auto; line-height:1.5; }
+.search-box {
+    background:rgba(0,20,35,.7); border:1px solid rgba(0,255,255,.3); border-radius:60px;
+    padding:5px 20px; margin-bottom:30px; display:flex; align-items:center; gap:15px;
+    flex-wrap:wrap; justify-content:center;
+}
+.search-box input {
+    flex:1; min-width:250px; background:rgba(0,0,0,0.4); border:none; padding:14px 20px;
+    border-radius:40px; color:white; font-size:15px; outline:none;
+}
+.search-box input:focus { background:rgba(0,0,0,0.6); box-shadow:0 0 8px rgba(0,255,255,.3); }
+.stats { font-size:13px; color:#8ffcff; background:rgba(0,0,0,0.3); padding:8px 18px; border-radius:40px; }
+.songs-table-container {
+    background:rgba(0,20,35,.6); border:1px solid rgba(0,255,255,.2); border-radius:20px;
+    overflow-x:auto; backdrop-filter:blur(4px);
+}
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th { background:rgba(0,40,60,.8); color:#8ffcff; padding:15px 12px; text-align:left; border-bottom:2px solid rgba(0,255,255,.3); }
+td { padding:12px; border-bottom:1px solid rgba(0,255,255,.1); vertical-align:middle; }
+tr:hover { background:rgba(0,255,255,.06); }
+.btn-request {
+    background:rgba(0,60,80,0.8); border:1px solid #4a9fbf; color:#c0f0ff; font-size:12px;
+    font-weight:600; padding:7px 16px; border-radius:30px; cursor:pointer; transition:all 0.2s;
+}
+.btn-request:hover { background:#0a6a8a; border-color:#8ffcff; color:white; transform:scale(1.02); }
+.btn-request:disabled { opacity:0.5; cursor:not-allowed; }
+.toast-message {
+    position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.92);
+    border:1px solid #4a9fbf; border-radius:50px; padding:12px 28px; color:#c0f0ff; font-size:14px;
+    z-index:1000; pointer-events:none;
+}
+.toast-message.success { border-color:#2aaf8f; color:#aaffdd; }
+.toast-message.error { border-color:#cf6a6a; color:#ffbbbb; }
+.loading { text-align:center; padding:60px; color:#8ffcff; }
+.empty-state { text-align:center; padding:60px; color:#88aacc; }
+.footer { text-align:center; margin-top:40px; padding-top:20px; border-top:1px solid rgba(0,255,255,.2); font-size:12px; color:#6699bb; }
+.footer a { color:#8ffcff; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <img src="logo.png" alt="Atlantis Emerged Radio" class="logo" onerror="this.style.display='none'">
+        <div class="brand">ATLANTIS EMERGED RADIO NETWORK</div>
+        <div class="title">Request a Song</div>
+        <div class="subtitle">Browse our music library and submit your requests.<br>Approved tracks will be added to the broadcast queue.</div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search by artist or song title...">
+        <div class="stats" id="statsCount">— tracks available</div>
+    </div>
+
+    <div class="songs-table-container">
+        <div id="songsListContainer"><div class="loading">Loading music library...</div></div>
+    </div>
+
+    <div class="footer">
+        <strong>Atlantis Emerged Radio</strong> — Ambient · Chillout · Deep Electronic<br>
+        Requests are processed in real time and added to the AutoDJ queue.<br>
+        <a href="index.html">← Return to Player</a>
+    </div>
+</div>
+
+<div id="toastMsg" class="toast-message" style="display:none;"></div>
+
+<script>
+// MUSIC LIBRARY
+const MUSIC_LIBRARY = [
+    { id: 1, artist: "Voyeur Dreams", title: "Atlantis Emerged-019", bpm: 120 },
+    { id: 2, artist: "The Weeknd", title: "Blinding Lights", bpm: 171 },
+    { id: 3, artist: "Dua Lipa", title: "Levitating", bpm: 103 },
+    { id: 4, artist: "Bad Bunny", title: "Tití Me Preguntó", bpm: 120 },
+    { id: 5, artist: "Rosalía", title: "DESPECHÁ", bpm: 128 }
+];
+
+// PROXY URL - CAMBIA ESTO POR LA URL DE TU WORKER
+const PROXY_URL = "https://atlantis-proxy.ban-ned.workers.dev";
+
+function showToast(message, type) {
+    const toast = document.getElementById("toastMsg");
+    toast.textContent = message;
+    toast.className = "toast-message " + (type || "info");
+    toast.style.display = "block";
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => {
+            toast.style.display = "none";
+            toast.style.opacity = "1";
+        }, 300);
+    }, 3500);
+}
+
 async function submitRequest(song) {
     showToast(`Processing: ${song.artist} - ${song.title}...`, "info");
     
@@ -7,8 +119,7 @@ async function submitRequest(song) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
                 artist: song.artist, 
-                title: song.title 
-                // No necesitas enviar email, el Worker lo pone
+                title: song.title
             })
         });
         
@@ -17,9 +128,88 @@ async function submitRequest(song) {
         if (result.success) {
             showToast(`✓ "${song.title}" by ${song.artist} added to queue.`, "success");
         } else {
-            showToast(`✗ ${result.message || `Could not add "${song.title}"`}`, "error");
+            showToast(`✗ ${result.message || "Could not add song"}`, "error");
         }
     } catch (error) {
         showToast(`Connection error: ${error.message}`, "error");
     }
 }
+
+function renderLibrary(filter) {
+    const container = document.getElementById("songsListContainer");
+    const filtered = MUSIC_LIBRARY.filter(song => 
+        song.title.toLowerCase().includes(filter.toLowerCase()) ||
+        song.artist.toLowerCase().includes(filter.toLowerCase())
+    );
+    
+    document.getElementById("statsCount").innerHTML = `🎵 ${filtered.length} of ${MUSIC_LIBRARY.length} tracks`;
+    
+    if (filtered.length === 0) {
+        container.innerHTML = `<div class="empty-state">No matching tracks found for "${escapeHtml(filter)}".</div>`;
+        return;
+    }
+    
+    let html = `<table><thead><tr><th>#</th><th>Artist</th><th>Title</th><th>BPM</th><th>Action</th></tr></thead><tbody>`;
+    filtered.forEach((song, index) => {
+        html += `<tr>
+            <td data-label="#">${index + 1}</td>
+            <td data-label="Artist">${escapeHtml(song.artist)}</td>
+            <td data-label="Title">${escapeHtml(song.title)}</td>
+            <td data-label="BPM">${song.bpm}</td>
+            <td data-label="Action"><button class="btn-request" onclick="requestTrack(${song.id})">Add to Queue</button></td>
+        </tr>`;
+    });
+    html += `</tbody>赶`;
+    container.innerHTML = html;
+}
+
+function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+window.requestTrack = async function(id) {
+    const song = MUSIC_LIBRARY.find(s => s.id === id);
+    if (!song) return;
+    
+    const buttons = document.querySelectorAll('.btn-request');
+    let targetBtn = null;
+    for (let btn of buttons) {
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(id.toString())) {
+            targetBtn = btn;
+            break;
+        }
+    }
+    if (targetBtn) {
+        targetBtn.disabled = true;
+        targetBtn.textContent = "Processing...";
+    }
+    
+    await submitRequest(song);
+    
+    setTimeout(() => {
+        if (targetBtn) {
+            targetBtn.disabled = false;
+            targetBtn.textContent = "Add to Queue";
+        }
+    }, 3000);
+};
+
+document.getElementById("searchInput").addEventListener("input", function(e) {
+    renderLibrary(e.target.value);
+});
+
+renderLibrary("");
+showToast("Select a track to submit your request.", "info");
+setTimeout(() => {
+    const toast = document.getElementById("toastMsg");
+    if (toast) toast.style.display = "none";
+}, 4000);
+</script>
+
+</body>
+</html>
