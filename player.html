@@ -1,81 +1,487 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Atlantis Emerged Radio</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-        }
-        .player-card {
-            background: rgba(0,0,0,0.6);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        .status {
-            font-size: 14px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-        audio {
-            width: 100%;
-            margin: 20px 0;
-            border-radius: 30px;
-        }
-        button {
-            background: #ff6b6b;
-            border: none;
-            color: white;
-            padding: 12px 30px;
-            font-size: 18px;
-            border-radius: 50px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: transform 0.2s;
-        }
-        button:active {
-            transform: scale(0.95);
-        }
-        .info {
-            font-size: 12px;
-            margin-top: 30px;
-            opacity: 0.7;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>ATLANTIS EMERGED RADIO NETWORK</title>
+
+<meta http-equiv="refresh" content="120">
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+
+    background:
+    radial-gradient(circle at top,
+        #1a5f7a 0%,
+        #0b2e46 35%,
+        #051522 100%);
+
+    font-family: Arial, Helvetica, sans-serif;
+    color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.panel{
+    width:95%;
+    max-width:1400px;
+    background:rgba(0,20,35,.75);
+    border:2px solid rgba(0,255,255,.25);
+    border-radius:20px;
+    padding:25px;
+    box-shadow:
+        0 0 30px rgba(0,255,255,.15),
+        inset 0 0 40px rgba(0,255,255,.05);
+}
+
+.logo{
+    display:block;
+    margin:0 auto 20px auto;
+    width:680px;
+    max-width:90%;
+    height:auto;
+    filter:
+        drop-shadow(0 0 12px rgba(0,255,255,.4))
+        drop-shadow(0 0 25px rgba(0,255,255,.2));
+}
+
+.main{
+    display:flex;
+    gap:30px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.cover{
+    width:420px;
+    max-width:35vw;
+    border-radius:16px;
+    box-shadow:
+        0 0 25px rgba(0,255,255,.25);
+}
+
+.network{
+    color:#8ffcff;
+    font-size:16px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    opacity:.75;
+    margin-bottom:10px;
+}
+    
+.info{
+    flex:1;
+}
+
+.nowplaying{
+    color:#8ffcff;
+    font-size:18px;
+    letter-spacing:3px;
+    margin-bottom:15px;
+}
+
+.song{
+    font-size:48px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.artist{
+    font-size:32px;
+    color:#8ffcff;
+    margin-bottom:10px;
+}
+
+.album{
+    font-size:22px;
+    color:#c8d9e3;
+    margin-bottom:25px;
+}
+
+.footer{
+    display:flex;
+    gap:40px;
+    font-size:18px;
+    flex-wrap:wrap;
+}
+
+.label{
+    opacity:.7;
+}
+
+/* Estilos del Reproductor */
+.player-section{
+    margin-top:25px;
+    padding-top:20px;
+    border-top:1px solid rgba(0,255,255,.2);
+}
+
+.player-controls{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.btn-play{
+    background:linear-gradient(135deg, #0a5f5f, #0a3f5f);
+    border:2px solid #8ffcff;
+    color:#8ffcff;
+    font-size:24px;
+    font-weight:bold;
+    padding:12px 32px;
+    border-radius:60px;
+    cursor:pointer;
+    transition:all 0.3s;
+    box-shadow:0 0 12px rgba(0,255,255,.3);
+    letter-spacing:2px;
+}
+
+.btn-play:hover{
+    background:linear-gradient(135deg, #0a7f7f, #0a5f7f);
+    transform:scale(1.02);
+    box-shadow:0 0 20px rgba(0,255,255,.5);
+}
+
+.btn-play:active{
+    transform:scale(0.98);
+}
+
+.btn-stop{
+    background:rgba(100,50,50,0.6);
+    border:1px solid #ff8888;
+    color:#ffaaaa;
+    font-size:18px;
+    padding:8px 20px;
+    border-radius:40px;
+    cursor:pointer;
+    transition:all 0.2s;
+}
+
+.btn-stop:hover{
+    background:rgba(150,50,50,0.8);
+}
+
+.volume-control{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(0,0,0,0.4);
+    padding:5px 15px;
+    border-radius:40px;
+}
+
+.volume-control span{
+    font-size:14px;
+    color:#8ffcff;
+}
+
+input[type="range"]{
+    width:120px;
+    height:4px;
+    -webkit-appearance:none;
+    background:#2a5a7a;
+    border-radius:5px;
+    outline:none;
+}
+
+input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#8ffcff;
+    cursor:pointer;
+    box-shadow:0 0 6px #8ffcff;
+}
+
+.player-status{
+    font-size:13px;
+    color:#8ffcff;
+    margin-left:10px;
+}
+
+.history-title{
+    margin-top:30px;
+    color:#8ffcff;
+    font-size:18px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    border-top:1px solid rgba(0,255,255,.2);
+    padding-top:20px;
+}
+
+.history{
+    margin-top:10px;
+    background:rgba(0,0,0,.20);
+    border-radius:12px;
+    padding:10px;
+    color:#d6f7ff;
+    font-size:16px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+.cc_recenttracks_list{
+    width:100%;
+    font-size:18px;    
+    text-align:left;
+    column-count:2;
+    column-gap:30px;
+}
+
+.live{
+    color:#8ffcff;
+    font-weight:bold;
+    text-shadow:
+        0 0 8px rgba(0,255,255,.7);
+}
+
+/* Responsive */
+@media (max-width: 800px){
+    .main{
+        flex-direction:column;
+    }
+    .cover{
+        max-width:80%;
+    }
+    .song{
+        font-size:32px;
+    }
+    .artist{
+        font-size:24px;
+    }
+    .cc_recenttracks_list{
+        column-count:1;
+    }
+    .footer{
+        gap:20px;
+    }
+}
+
+</style>
 </head>
+
 <body>
-    <div class="player-card">
-        <h1>📻 Atlantis Emerged Radio Player</h1>
-        <div class="status">🔴 En Vivo</div>
-        
-        <!-- Este es tu reproductor -->
-        <audio id="radioPlayer" controls autoplay>
-            <source src="https://francisc-gecko.radioca.st/stream" type="audio/mpeg">
-            Tu navegador no soporta audio.
-        </audio>
-        
-        <button onclick="document.getElementById('radioPlayer').play()">▶ Reproducir</button>
+
+<div class="panel">
+
+    <img src="logo.png" class="logo" alt="Atlantis Emerged Radio">
+
+    <div class="main">
+
+        <img class="cc_streaminfo cover"
+             data-type="trackimageurl"
+             data-username="francisc"
+             alt="Cover art">
+
         <div class="info">
-            Guarda esta página en tu pantalla de inicio<br>
-            (⋮ → Añadir a la pantalla de inicio)
+
+            <div class="network">
+              ATLANTIS EMERGED RADIO
+            </div>
+            
+            <div class="nowplaying">
+                NOW PLAYING
+            </div>
+
+            <div class="song">
+                <span class="cc_streaminfo"
+                      data-type="tracktitle"
+                      data-username="francisc"></span>
+            </div>
+
+            <div class="artist">
+                <span class="cc_streaminfo"
+                      data-type="trackartist"
+                      data-username="francisc"></span>
+            </div>
+
+            <div class="album">
+                Album:
+                <span class="cc_streaminfo"
+                      data-type="trackalbum"
+                      data-username="francisc"></span>
+            </div>
+
+            <div class="footer">
+
+                <div>
+                    <span class="label">Listeners</span><br>
+                    <span class="cc_streaminfo"
+                          data-type="listeners"
+                          data-username="francisc"></span>
+                </div>
+
+                <div>
+                    <span class="label">Bitrate</span><br>
+                    <span class="cc_streaminfo"
+                          data-type="bitrate"
+                          data-username="francisc"></span>
+                </div>
+
+                <div>
+                    <span class="label">Stream</span><br>
+                    <span class="cc_streaminfo"
+                          data-type="server"
+                          data-username="francisc"></span>
+                </div>
+
+                <div>
+                    <span class="label">Status</span><br>
+                    <span class="live">🔴 LIVE</span>
+                </div>
+                
+            </div>
+
+            <!-- 🎵 REPRODUCTOR INTEGRADO -->
+            <div class="player-section">
+                <div class="player-controls">
+                    <button class="btn-play" id="playBtn">▶ REPRODUCIR</button>
+                    <button class="btn-stop" id="stopBtn">⏹ DETENER</button>
+                    <div class="volume-control">
+                        <span>🔊</span>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="70">
+                    </div>
+                    <span class="player-status" id="playerStatus">⚪ Detenido</span>
+                </div>
+            </div>
+            <!-- FIN REPRODUCTOR -->
+
+        </div>
+
+    </div>
+
+    <div class="history-title">
+        📜 RECENT TRACKS
+    </div>
+
+    <div class="history">
+        <div class="cc_recenttracks_list"
+             data-username="francisc">
+             Cargando...
         </div>
     </div>
+
+</div>
+
+<script src="https://falcon.shoutca.st/system/streaminfo.js"></script>
+<script src="https://falcon.shoutca.st/system/recenttracks.js"></script>
+
+<!-- Script del Reproductor -->
+<script>
+    (function() {
+        // URL del stream de Atlantis Emerged
+        const STREAM_URL = "https://francisc-gecko.radioca.st/stream";
+        
+        let audioElement = null;
+        let isPlaying = false;
+        
+        // Elementos del DOM
+        const playBtn = document.getElementById('playBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const playerStatus = document.getElementById('playerStatus');
+        
+        // Función para crear el elemento de audio si no existe
+        function getAudio() {
+            if (!audioElement) {
+                audioElement = new Audio();
+                audioElement.src = STREAM_URL;
+                audioElement.volume = volumeSlider.value / 100;
+                
+                // Eventos del audio
+                audioElement.addEventListener('playing', function() {
+                    isPlaying = true;
+                    playerStatus.innerHTML = '🎧 EN VIVO';
+                    playerStatus.style.color = '#8ffcff';
+                    playBtn.innerHTML = '⏸ PAUSA';
+                });
+                
+                audioElement.addEventListener('pause', function() {
+                    isPlaying = false;
+                    playerStatus.innerHTML = '⏸ En pausa';
+                    playerStatus.style.color = '#ffaa88';
+                    playBtn.innerHTML = '▶ REPRODUCIR';
+                });
+                
+                audioElement.addEventListener('ended', function() {
+                    // Intentar reconectar si termina (el stream no debería terminar)
+                    isPlaying = false;
+                    playerStatus.innerHTML = '⚪ Reconectando...';
+                    playBtn.innerHTML = '▶ REPRODUCIR';
+                });
+                
+                audioElement.addEventListener('error', function(e) {
+                    console.error('Error de audio:', e);
+                    playerStatus.innerHTML = '❌ Error de conexión';
+                    playerStatus.style.color = '#ff8888';
+                    isPlaying = false;
+                    playBtn.innerHTML = '▶ REPRODUCIR';
+                });
+            }
+            return audioElement;
+        }
+        
+        // Reproducir
+        function playStream() {
+            const audio = getAudio();
+            
+            // Si está en pausa, reanudar
+            if (!isPlaying && audio.paused) {
+                audio.play().catch(function(error) {
+                    console.error('Error al reproducir:', error);
+                    playerStatus.innerHTML = '⚠️ Haz clic primero en la página';
+                    playerStatus.style.color = '#ffaa66';
+                    
+                    // Algunos navegadores requieren interacción del usuario
+                    setTimeout(function() {
+                        playerStatus.innerHTML = '⚪ Haz clic en Reproducir';
+                    }, 2000);
+                });
+            } else if (!audio.paused) {
+                // Si está sonando, pausar
+                audio.pause();
+            }
+        }
+        
+        // Detener (pausar y resetear)
+        function stopStream() {
+            const audio = getAudio();
+            audio.pause();
+            // No reseteamos el src para poder reanudar rápido
+            playerStatus.innerHTML = '⏹ Detenido';
+            playerStatus.style.color = '#aaaaaa';
+            isPlaying = false;
+            playBtn.innerHTML = '▶ REPRODUCIR';
+        }
+        
+        // Cambiar volumen
+        function setVolume(value) {
+            const audio = getAudio();
+            audio.volume = value / 100;
+        }
+        
+        // Eventos de los botones
+        playBtn.addEventListener('click', playStream);
+        stopBtn.addEventListener('click', stopStream);
+        volumeSlider.addEventListener('input', function(e) {
+            setVolume(e.target.value);
+        });
+        
+        // Estado inicial
+        playerStatus.innerHTML = '⚪ Pulsa Reproducir';
+        
+        // Pequeña ayuda: informar que el usuario debe interactuar
+        console.log('Player listo. Stream URL:', STREAM_URL);
+    })();
+</script>
+
 </body>
 </html>
