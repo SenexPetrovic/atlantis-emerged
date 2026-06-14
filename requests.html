@@ -369,9 +369,7 @@ tr:hover{
     // ============================================
     // CENTOVA API CONFIGURATION
     // ============================================
-    const CENTOVA_API_URL = "https://francisc-gecko.radioca.st/api.php";
-    const CENTOVA_USER = "francisc";
-    const CENTOVA_PASS = "YOUR_PASSWORD_HERE";  // ← IMPORTANT: Update this
+
     const CENTOVA_PLAYLIST = 1;
     
     let currentFilter = "";
@@ -391,36 +389,27 @@ tr:hover{
         }, 3500);
     }
     
-    async function submitRequest(song) {
-        showToast(`Processing request: ${song.artist} - ${song.title}...`, "info");
-        
-        const params = new URLSearchParams();
-        params.append("xm", "playlist.add");
-        params.append("f", "json");
-        params.append("a[username]", CENTOVA_USER);
-        params.append("a[password]", CENTOVA_PASS);
-        params.append("a[playlist]", CENTOVA_PLAYLIST);
-        params.append("a[trackpath]", song.path);
-        
-        try {
-            const response = await fetch(`${CENTOVA_API_URL}?${params.toString()}`, {
-                method: "GET",
-                mode: "cors",
-                headers: { "Accept": "application/json" }
-            });
-            
-            if (response.ok) {
-                showToast(`✓ "${song.title}" added to queue.`, "success");
-                return true;
-            } else {
-                throw new Error(`HTTP ${response.status}`);
-            }
-        } catch (error) {
-            console.error("API Error:", error);
-            showToast(`Unable to submit request. Please try again.`, "error");
-            return false;
-        }
+// Ahora la contraseña está en Cloudflare, no aquí
+const PROXY_URL = "https://tu-worker.workers.dev";  // ← Tu URL de Cloudflare Worker
+
+async function submitRequest(song) {
+    // Solo enviamos la canción, NO la contraseña
+    const response = await fetch(PROXY_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            trackpath: song.path
+        })
+    });
+    
+    if (response.ok) {
+        showToast(`✓ "${song.title}" added to queue.`, "success");
+    } else {
+        showToast(`Unable to submit request.`, "error");
     }
+}
     
     function renderLibrary(filter = "") {
         const container = document.getElementById("songsListContainer");
