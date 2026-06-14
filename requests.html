@@ -1,43 +1,25 @@
-// ============================================
-// ACTUALIZAR SOLO LA FUNCIÓN submitRequest
-// El resto del archivo requests.html queda igual
-// ============================================
-
 async function submitRequest(song) {
-    console.log("===== REQUEST START =====");
-    console.log("Song:", song.title, "-", song.artist);
-    console.log("Proxy URL:", PROXY_URL);
-    
     showToast(`Processing: ${song.artist} - ${song.title}...`, "info");
     
     try {
-        // Enviamos solo artista y título (NO el path de archivo)
         const response = await fetch(PROXY_URL, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                artist: song.artist,
-                title: song.title,
-                songId: song.id
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                artist: song.artist, 
+                title: song.title 
+                // No necesitas enviar email, el Worker lo pone
             })
         });
         
-        console.log("Response status:", response.status);
-        
         const result = await response.json();
-        console.log("Response data:", result);
         
         if (result.success) {
             showToast(`✓ "${song.title}" by ${song.artist} added to queue.`, "success");
         } else {
-            showToast(`✗ Could not add "${song.title}". ${result.error || ''}`, "error");
+            showToast(`✗ ${result.message || `Could not add "${song.title}"`}`, "error");
         }
     } catch (error) {
-        console.error("Fetch error:", error);
         showToast(`Connection error: ${error.message}`, "error");
     }
-    
-    console.log("===== REQUEST END =====");
 }
